@@ -1,30 +1,85 @@
 import {
-  Links,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
+	isRouteErrorResponse,
+	Links,
+	Meta,
+	Outlet,
+	Scripts,
+	ScrollRestoration,
+	useLoaderData,
+	useRouteError,
 } from "@remix-run/react";
 import "./tailwind.css";
+import {
+	PreventFlashOnWrongTheme,
+	ThemeProvider,
+	useTheme,
+} from "remix-themes";
+import { themeSessionResolver } from "./services/session.server";
+import { LoaderFunctionArgs } from "@remix-run/node";
+import clsx from "clsx";
+import { Toaster } from "./components/ui/toaster";
+import { cn } from "./lib/utils";
 
-export function Layout({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        {children}
-        <ScrollRestoration />
-        <Scripts />
-      </body>
-    </html>
-  );
+export async function loader({ request }: LoaderFunctionArgs) {
+	const { getTheme } = await themeSessionResolver(request);
+	return {
+		theme: getTheme(),
+	};
 }
 
-export default function App() {
-  return <Outlet />;
+export default function AppWithProviders() {
+	const data = useLoaderData<typeof loader>();
+
+	return (
+		<ThemeProvider specifiedTheme={data.theme} themeAction="/action/set-theme">
+			<App />
+		</ThemeProvider>
+	);
+}
+function App() {
+	const data = useLoaderData<typeof loader>();
+	const [theme] = useTheme();
+	return (
+		<html lang="en" data-theme={theme ?? ""} className={cn(theme)}>
+			<head>
+				<meta charSet="utf-8" />
+				<meta name="viewport" content="width=device-width, initial-scale=1" />
+				<Meta />
+				<PreventFlashOnWrongTheme ssrTheme={Boolean(data.theme)} />
+				<Links />
+			</head>
+			<body className="   ">
+				<div className="container min-h-screen flex flex-col">
+					<Outlet />
+					<Toaster />
+					<ScrollRestoration />
+					<Scripts />
+				</div>
+			</body>
+		</html>
+	);
+}
+export function ErrorBoundary() {
+	const error = useRouteError();
+	if (isRouteErrorResponse(error)) {
+		return (
+			<div>
+				<h1>
+					{error.status} {error.statusText}
+				</h1>
+				<p>{error.data}</p>
+			</div>
+		);
+	} else if (error instanceof Error) {
+		return (
+			<div>
+				<h1>Error</h1>
+				<p>{error.message}</p>
+				<p>The stack trace is:</p>
+				<pre>{error.stack}</pre>
+			</div>
+		);
+	} else {
+		return <h1>Unknown Error</h1>;
+	}
 }
