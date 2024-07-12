@@ -1,13 +1,22 @@
-# Welcome to Remix!
+# Welcome to ALT Text!
 
-- 📖 [Remix docs](https://remix.run/docs)
+- 🧑‍💻[Demo](alt-text.adamkindberg.com)
 
 ## Development
 
-Run the dev server:
+Run the dev server
+using the package manager of your choice
+I'll use pnpm.
 
 ```shellscript
-npm run dev
+pnpm dev
+```
+
+## Migration
+
+Migrate using the db:migrate command to migrate the schema to your database
+```shellscript
+pnpm db:migrate
 ```
 
 ## Deployment
