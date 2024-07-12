@@ -4,14 +4,16 @@ import { sessionStorage } from "~/services/session.server";
 import { createUser, getUserById } from "./user.server";
 import { Params } from "@remix-run/react";
 import { SelectUser } from "db/types/schemas-types";
+
 export const authenticator = new Authenticator<SelectUser["id"] | undefined>(
 	sessionStorage
 );
+const HOST_URL = process.env.NODE_ENV === "production" ? "https://alttext.adamkindberg.com" : "http://localhost:3000";
 const googleStrategy = new GoogleStrategy(
 	{
 		clientID: process.env.GOOGLE_AUTH_CLIENT_ID!,
 		clientSecret: process.env.GOOGLE_AUTH_CLIENT_SECRET!,
-		callbackURL: "http://localhost:3000/auth/google/callback",
+		callbackURL: `${HOST_URL}/auth/google/callback`,
 	},
 	async ({ accessToken, profile }) => {
 		return createUser({
