@@ -1,3 +1,4 @@
+import { captureRemixErrorBoundaryError, withSentry } from "@sentry/remix";
 import {
 	isRouteErrorResponse,
 	Links,
@@ -16,7 +17,6 @@ import {
 } from "remix-themes";
 import { themeSessionResolver } from "./services/session.server";
 import { LoaderFunctionArgs } from "@remix-run/node";
-import clsx from "clsx";
 import { Toaster } from "./components/ui/toaster";
 import { cn } from "./lib/utils";
 
@@ -27,7 +27,7 @@ export async function loader({ request }: LoaderFunctionArgs) {
 	};
 }
 
-export default function AppWithProviders() {
+function AppWithProviders() {
 	const data = useLoaderData<typeof loader>();
 
 	return (
@@ -36,6 +36,8 @@ export default function AppWithProviders() {
 		</ThemeProvider>
 	);
 }
+
+export default withSentry(AppWithProviders);
 function App() {
 	const data = useLoaderData<typeof loader>();
 	const [theme] = useTheme();
@@ -61,6 +63,7 @@ function App() {
 }
 export function ErrorBoundary() {
 	const error = useRouteError();
+	captureRemixErrorBoundaryError(error);
 	if (isRouteErrorResponse(error)) {
 		return (
 			<div>

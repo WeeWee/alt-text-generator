@@ -1,3 +1,4 @@
+import { sentryVitePlugin } from "@sentry/vite-plugin";
 import { vitePlugin as remix } from "@remix-run/dev";
 import { remixDevTools } from "remix-development-tools";
 import { defineConfig } from "vite";
@@ -12,5 +13,18 @@ export default defineConfig({
 	server: {
 		port: 3000,
 	},
-	plugins: [remixDevTools(), remix(remixConfig), tsconfigPaths()],
+
+	plugins: [
+		remixDevTools(),
+		remix(remixConfig),
+		tsconfigPaths(),
+		sentryVitePlugin({
+			org: process.env.SENTRY_ORG!,
+			project: process.env.SENTRY_PROJECT!,
+		}),
+	],
+
+	build: {
+		sourcemap: true,
+	},
 });
