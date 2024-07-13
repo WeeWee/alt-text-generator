@@ -14,7 +14,7 @@ export async function createUser(data: InsertUser) {
 			})
 			.returning()
 	).at(0);
-
+	console.log("user", user);
 	return user?.id;
 }
 export type UserType = Awaited<ReturnType<typeof getUserById>>;
