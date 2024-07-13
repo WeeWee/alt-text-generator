@@ -8,7 +8,10 @@ import { SelectUser } from "db/types/schemas-types";
 export const authenticator = new Authenticator<SelectUser["id"] | undefined>(
 	sessionStorage
 );
-const HOST_URL = process.env.NODE_ENV === "production" ? "https://alttext.adamkindberg.com" : "http://localhost:3000";
+const HOST_URL =
+	process.env.NODE_ENV === "production"
+		? process.env.HOST_URL!
+		: "http://localhost:3000";
 const googleStrategy = new GoogleStrategy(
 	{
 		clientID: process.env.GOOGLE_AUTH_CLIENT_ID!,
@@ -42,11 +45,11 @@ export async function requireUser({
 		  })
 		: await authenticator.isAuthenticated(request);
 	const user = await getUserById(userId!);
-	
+
 	if (!user && userId) {
 		return await authenticator.logout(request, { redirectTo: "/login" });
 	}
-	
+
 	return user ?? null;
 }
 authenticator.use(googleStrategy);

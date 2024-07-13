@@ -17,7 +17,6 @@ import {
 	DropdownMenu,
 	DropdownMenuTrigger,
 	DropdownMenuContent,
-	DropdownMenuLabel,
 	DropdownMenuSeparator,
 	DropdownMenuItem,
 } from "./ui/dropdown-menu";
@@ -70,50 +69,62 @@ export function Navbar({ user }: { user: UserType }) {
 						</NavigationMenuContent>
 					</NavigationMenuItem>
 				) : (
-					<NavigationMenuItem>
-						<Link to="/workplaces" className="hover:text-muted-foreground">
-							Workplaces
-						</Link>
-					</NavigationMenuItem>
+					user && (
+						<NavigationMenuItem>
+							<Link to="/workplaces" className="hover:text-muted-foreground">
+								Workplaces
+							</Link>
+						</NavigationMenuItem>
+					)
 				)}
 				<div className="flex flex-1 items-center justify-end">
-					<DropdownMenu>
-						<DropdownMenuTrigger>
-							{" "}
-							<Avatar className="w-8 h-8">
-								<AvatarImage
-									src={user?.picture}
-									alt={`Picture of ${user?.name}`}
-								/>{" "}
-								<AvatarFallback>{user?.name.at(0)}</AvatarFallback>
-							</Avatar>
-						</DropdownMenuTrigger>
-						<DropdownMenuContent className="mt-2 w-52">
-							<ul className="grid  gap-3 px-2 ">
-								{accountRoutes.map((route) => (
-									<DropdownMenuItem className="group" key={route.name}>
-										<Link
-											className="w-full group-hover:text-muted-foreground"
-											to={route.href}
+					{user ? (
+						<DropdownMenu>
+							<DropdownMenuTrigger>
+								{" "}
+								<Avatar className="w-8 h-8">
+									<AvatarImage
+										src={user?.picture}
+										alt={`Picture of ${user?.name}`}
+									/>{" "}
+									<AvatarFallback>{user?.name.at(0)}</AvatarFallback>
+								</Avatar>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent className="mt-2 w-52">
+								<ul className="grid  gap-3 px-2 ">
+									{accountRoutes.map((route) => (
+										<DropdownMenuItem className="group" key={route.name}>
+											<Link
+												className="w-full group-hover:text-muted-foreground"
+												to={route.href}
+											>
+												{route.name}
+											</Link>
+										</DropdownMenuItem>
+									))}
+									<DropdownMenuSeparator />
+									<DropdownMenuItem className="group">
+										<Form
+											method="post"
+											action="/logout"
+											className="w-full mb-2"
 										>
-											{route.name}
-										</Link>
+											<button
+												type="submit"
+												className="w-full text-start group-hover:text-muted-foreground"
+											>
+												Logout
+											</button>
+										</Form>
 									</DropdownMenuItem>
-								))}
-								<DropdownMenuSeparator />
-								<DropdownMenuItem className="group">
-									<Form method="post" action="/logout" className="w-full mb-2">
-										<button
-											type="submit"
-											className="w-full text-start group-hover:text-muted-foreground"
-										>
-											Logout
-										</button>
-									</Form>
-								</DropdownMenuItem>
-							</ul>
-						</DropdownMenuContent>
-					</DropdownMenu>
+								</ul>
+							</DropdownMenuContent>
+						</DropdownMenu>
+					) : (
+						<Button asChild size="sm">
+							<Link to="/login">Start now</Link>
+						</Button>
+					)}
 				</div>
 			</NavigationMenuList>
 		</NavigationMenu>
