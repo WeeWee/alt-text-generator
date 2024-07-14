@@ -10,7 +10,7 @@
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "drizzle-kit migrate",
 		"db:drop": "drizzle-kit drop",
-		"start": "NODE_OPTIONS='--import ./instrumentation.server.mjs' remix-serve ./build/server/index.js",
+		"start": "set NODE_OPTIONS='--import ./instrumentation.server.mjs' && remix-serve ./build/server/index.js",
 		"typecheck": "tsc"
 	},
 	"dependencies": {

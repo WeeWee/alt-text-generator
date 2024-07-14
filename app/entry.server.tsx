@@ -13,6 +13,17 @@ import { RemixServer } from "@remix-run/react";
 import { isbot } from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
 
+Sentry.init({
+	dsn: process.env.SENTRY_DSN,
+	tracesSampleRate: 1,
+	autoInstrumentRemix: true,
+	captureActionFormDataKeys: {
+		key_x: true,
+		key_y: true,
+	},
+	sendDefaultPii: true,
+});
+
 export const handleError = Sentry.sentryHandleError;
 
 const ABORT_DELAY = 5_000;
