@@ -18,7 +18,6 @@ export default defineConfig({
 		remixDevTools(),
 		remix(remixConfig),
 		tsconfigPaths(),
-		
 		sentryVitePlugin({
 			org: process.env.SENTRY_ORG!,
 			project: process.env.SENTRY_PROJECT!,

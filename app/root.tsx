@@ -22,8 +22,10 @@ import { cn } from "./lib/utils";
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const { getTheme } = await themeSessionResolver(request);
+	const SENTRY_DSN = process.env.SENTRY_DSN!;
 	return {
 		theme: getTheme(),
+		ENV: { SENTRY_DSN },
 	};
 }
 
@@ -36,7 +38,13 @@ function AppWithProviders() {
 		</ThemeProvider>
 	);
 }
-
+declare global {
+	interface Window {
+		ENV: {
+			SENTRY_DSN: string;
+		};
+	}
+}
 export default withSentry(AppWithProviders);
 function App() {
 	const data = useLoaderData<typeof loader>();
@@ -55,6 +63,11 @@ function App() {
 					<Outlet />
 					<Toaster />
 					<ScrollRestoration />
+					<script
+						dangerouslySetInnerHTML={{
+							__html: `window.ENV = ${JSON.stringify(data.ENV)}`,
+						}}
+					/>
 					<Scripts />
 				</div>
 			</body>
