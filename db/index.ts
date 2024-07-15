@@ -8,6 +8,7 @@ import { migrate } from "drizzle-orm/libsql/migrator";
 	token: process.env.TURSO_TOKEN!,
 }); */
 
+console.log("TURSO_CONNECTION_URL", process.env.TURSO_CONNECTION_URL);
 const client = createClient({
 	url: `libsql://${process.env.TURSO_CONNECTION_URL}`,
 	authToken: process.env.TURSO_AUTH_TOKEN!,
@@ -15,6 +16,7 @@ const client = createClient({
 export const db = drizzle(client, {
 	schema,
 });
+
 /* export const createDatabase = async (dbName: string) => {
 	return await turso.databases.create(dbName);
 };

@@ -8,12 +8,12 @@ import { SelectUser } from "db/types/schemas-types";
 export const authenticator = new Authenticator<SelectUser["id"] | undefined>(
 	sessionStorage
 );
-const HOST_URL = "https://alttext.adamkindberg.com";
-/* process.env.NODE_ENV === "production"
+const HOST_URL =
+	process.env.NODE_ENV === "production"
 		? "https://alttext.adamkindberg.com"
-		: "http://localhost:3000"; */
+		: "http://localhost:3000";
 
-console.log(process.env.NODE_ENV);
+console.log("HOST_URL", HOST_URL);
 const googleStrategy = new GoogleStrategy(
 	{
 		clientID: process.env.GOOGLE_AUTH_CLIENT_ID!,
