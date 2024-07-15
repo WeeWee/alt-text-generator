@@ -6,7 +6,8 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import { installGlobals } from "@remix-run/node";
 
 import remixConfig from "./remix.config.mjs";
-
+import dotenv from "dotenv";
+dotenv.config();
 installGlobals();
 
 export default defineConfig({
@@ -22,7 +23,6 @@ export default defineConfig({
 			org: process.env.SENTRY_ORG!,
 			project: process.env.SENTRY_PROJECT!,
 			authToken: process.env.SENTRY_AUTH_TOKEN!,
-			
 		}),
 	],
 
