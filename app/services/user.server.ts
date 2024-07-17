@@ -4,6 +4,8 @@ import { InsertUser, SelectUser } from "db/types/schemas-types";
 import { eq } from "drizzle-orm";
 
 export async function createUser(data: InsertUser) {
+	console.log("CONNECTION_URL IN USER", process.env.TURSO_CONNECTION_URL);
+	console.log("DB", db);
 	const user = (
 		await db
 			.insert(users)
@@ -14,7 +16,7 @@ export async function createUser(data: InsertUser) {
 			})
 			.returning()
 	).at(0);
-	
+
 	return user?.id;
 }
 export type UserType = Awaited<ReturnType<typeof getUserById>>;
