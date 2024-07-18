@@ -32,6 +32,7 @@ export async function loader({ request, params }: LoaderFunctionArgs) {
 const integrations = [
 	{
 		title: "cloudinary",
+		access_label: "Cloud name",
 		description: `
 		<pre>
 			<code>context: &#123;
@@ -44,6 +45,7 @@ const integrations = [
 	},
 	{
 		title: "imagekit",
+		access_label: "Endpoint",
 		description: `
 		<pre>
 			<code>customMetadata: &#123;
@@ -66,6 +68,7 @@ export default function Settings() {
 							key={integration.title}
 							lastResult={lastResult?.[integration.title]}
 							title={integration.title}
+							access_label={integration.access_label}
 						/>
 						<Collapsible
 							key={`${integration.title} description`}
