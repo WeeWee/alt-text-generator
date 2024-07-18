@@ -20,6 +20,7 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuItem,
 } from "./ui/dropdown-menu";
+import { ThemeToggle } from "./theme-toggle";
 const accountRoutes = [
 	{
 		name: "Account",
@@ -77,7 +78,7 @@ export function Navbar({ user }: { user: UserType }) {
 						</NavigationMenuItem>
 					)
 				)}
-				<div className="flex flex-1 items-center justify-end">
+				<div className="flex flex-1 items-center gap-8 justify-end">
 					{user ? (
 						<DropdownMenu>
 							<DropdownMenuTrigger>
@@ -125,6 +126,7 @@ export function Navbar({ user }: { user: UserType }) {
 							<Link to="/login">Start now</Link>
 						</Button>
 					)}
+					<ThemeToggle />
 				</div>
 			</NavigationMenuList>
 		</NavigationMenu>

@@ -12,6 +12,7 @@ import {
 import "./tailwind.css";
 import {
 	PreventFlashOnWrongTheme,
+	Theme,
 	ThemeProvider,
 	useTheme,
 } from "remix-themes";
@@ -19,6 +20,7 @@ import { themeSessionResolver } from "./services/session.server";
 import { LoaderFunctionArgs } from "@remix-run/node";
 import { Toaster } from "./components/ui/toaster";
 import { cn } from "./lib/utils";
+import { useEffect } from "react";
 
 export async function loader({ request }: LoaderFunctionArgs) {
 	const { getTheme } = await themeSessionResolver(request);
@@ -48,9 +50,17 @@ declare global {
 export default withSentry(AppWithProviders);
 function App() {
 	const data = useLoaderData<typeof loader>();
-	const [theme] = useTheme();
+	const [theme, setTheme] = useTheme();
+	useEffect(() => {
+		if (window != undefined && !theme)
+			setTheme(
+				window.matchMedia("(prefers-color-scheme: dark)").matches
+					? Theme.DARK
+					: Theme.LIGHT
+			);
+	}, []);
 	return (
-		<html lang="en" data-theme={theme ?? ""} className={cn(theme)}>
+		<html lang="en" className={cn(theme)}>
 			<head>
 				<meta charSet="utf-8" />
 				<meta name="viewport" content="width=device-width, initial-scale=1" />
