@@ -22,10 +22,16 @@ export function ThemeToggle() {
 				</Button>
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align="end">
-				<DropdownMenuItem onClick={() => setTheme(Theme.LIGHT)}>
+				<DropdownMenuItem
+					onClick={() => setTheme(Theme.LIGHT)}
+					className="hover:cursor-pointer"
+				>
 					Light
 				</DropdownMenuItem>
-				<DropdownMenuItem onClick={() => setTheme(Theme.DARK)}>
+				<DropdownMenuItem
+					onClick={() => setTheme(Theme.DARK)}
+					className="hover:cursor-pointer"
+				>
 					Dark
 				</DropdownMenuItem>
 			</DropdownMenuContent>
