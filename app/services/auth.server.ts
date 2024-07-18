@@ -13,7 +13,6 @@ const HOST_URL =
 		? "https://alttext.adamkindberg.com"
 		: "http://localhost:3000";
 
-console.log("HOST_URL", HOST_URL);
 const googleStrategy = new GoogleStrategy(
 	{
 		clientID: process.env.GOOGLE_AUTH_CLIENT_ID!,

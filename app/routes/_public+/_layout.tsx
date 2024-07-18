@@ -5,7 +5,6 @@ import { Navbar } from "~/components/navbar";
 import { requireUser } from "~/services/auth.server";
 export async function loader({ request, params }: LoaderFunctionArgs) {
 	const user = await requireUser({ request, params, redirect: false });
-	console.log(user);
 	return user;
 }
 export default function Layout() {
