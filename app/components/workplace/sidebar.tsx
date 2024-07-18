@@ -5,7 +5,7 @@ import {
 	TooltipProvider,
 	TooltipTrigger,
 } from "../ui/tooltip";
-import { Home, Settings, Users2, Workflow } from "lucide-react";
+import { Settings, Users2, Workflow } from "lucide-react";
 import { SelectWorkplace } from "db/types/schemas-types";
 import { cn } from "~/lib/utils";
 
@@ -19,7 +19,7 @@ export function Sidebar({
 	const location = useLocation();
 
 	return (
-		<aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">
+		<aside className="fixed bottom-0 top-12 border-t rounded-t-sm left-0 z-10 hidden w-14 flex-col  border-r bg-background lg:flex">
 			<nav className="flex flex-col items-center gap-4 px-2 sm:py-5">
 				<TooltipProvider>
 					<Tooltip>
