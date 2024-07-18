@@ -212,8 +212,7 @@ export default function Workplace() {
 										disabled={submitting}
 										name="_action"
 										value="generate"
-										className=" text-sm md:text-base "
-										size="sm"
+										className=" text-xs md:text-sm h-9 rounded-md px-3 md:h-10 md:px-4 md:py-2 "
 									>
 										Generate {getSelectedImages().length} description (s)
 									</Button>
