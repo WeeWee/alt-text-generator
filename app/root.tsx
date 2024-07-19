@@ -52,7 +52,7 @@ function App() {
 	const data = useLoaderData<typeof loader>();
 	const [theme, setTheme] = useTheme();
 	useEffect(() => {
-		if (window != undefined && !theme)
+		if (window != undefined && !theme && !data.theme)
 			setTheme(
 				window.matchMedia("(prefers-color-scheme: dark)").matches
 					? Theme.DARK
