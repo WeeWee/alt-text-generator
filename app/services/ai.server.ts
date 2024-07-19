@@ -1,4 +1,5 @@
 import { HfInference } from "@huggingface/inference";
+import dayjs from "dayjs";
 const hf = new HfInference(process.env.HUGGING_FACE_KEY);
 export const generateDescription = async (url: string) => {
 	try {
@@ -8,9 +9,23 @@ export const generateDescription = async (url: string) => {
 			model: "nlpconnect/vit-gpt2-image-captioning",
 			data,
 		});
+
 		return result.generated_text;
 	} catch (error) {
 		console.error(error);
 		return null;
 	}
+};
+
+export const generateDescriptionBatch = async (urls: string[]) => {
+	const time = new Date().getTime();
+	console.log("starting batch");
+	const descriptions = await Promise.all(
+		urls.map((url) => {
+			return generateDescription(url);
+		})
+	);
+	console.log("ending batch");
+	console.log("time taken", dayjs(new Date().getTime() - time).format("mm:ss"));
+	return descriptions;
 };

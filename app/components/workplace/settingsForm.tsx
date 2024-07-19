@@ -15,10 +15,12 @@ export function SettingsForm({
 	workplaceId,
 	lastResult,
 	title,
+	access_label,
 }: {
 	workplaceId: string;
 	lastResult: any;
 	title: string;
+	access_label: string;
 }) {
 	const [form, fields] = useForm({
 		lastResult,
@@ -44,9 +46,9 @@ export function SettingsForm({
 				<Input
 					{...endpointProps}
 					errors={fields.endpoint.errors}
-					description={"Endpoint"}
+					description={access_label}
 					defaultValue={fields.endpoint.initialValue}
-					aria-label={"Endpoint"}
+					aria-label={access_label}
 					placeholder="Enter your value here"
 				/>
 				<Input
