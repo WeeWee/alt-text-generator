@@ -4,7 +4,7 @@ import { sessionStorage } from "~/services/session.server";
 import { createUser, getUserById } from "./user.server";
 import { Params } from "@remix-run/react";
 import { SelectUser } from "db/types/schemas-types";
-
+import { GitHubStrategy } from "remix-auth-github";
 export const authenticator = new Authenticator<SelectUser["id"] | undefined>(
 	sessionStorage
 );
@@ -13,6 +13,24 @@ const HOST_URL =
 		? "https://alttext.adamkindberg.com"
 		: "http://localhost:3000";
 
+const githubStrategy = new GitHubStrategy(
+	{
+		clientID: process.env.GITHUB_AUTH_CLIENT_ID!,
+		clientSecret: process.env.GITHUB_AUTH_CLIENT_SECRET!,
+		callbackURL: `${HOST_URL}/auth/github/callback`,
+	},
+	async ({ accessToken, profile }) => {
+		return createUser({
+			token: accessToken,
+			id: profile.id!,
+			email: profile.emails![0].value,
+			name: profile.displayName!,
+			picture: profile.photos![0].value,
+			provider: profile.provider,
+			createdAt: new Date().toISOString(),
+		});
+	}
+);
 const googleStrategy = new GoogleStrategy(
 	{
 		clientID: process.env.GOOGLE_AUTH_CLIENT_ID!,
@@ -26,7 +44,7 @@ const googleStrategy = new GoogleStrategy(
 			email: profile.emails![0].value,
 			name: profile.displayName!,
 			picture: profile.photos![0].value,
-			provider: "google",
+			provider: profile.provider,
 			createdAt: new Date().toISOString(),
 		});
 	}
@@ -54,3 +72,4 @@ export async function requireUser({
 	return user ?? null;
 }
 authenticator.use(googleStrategy);
+authenticator.use(githubStrategy);
