@@ -33,7 +33,11 @@ const integrations = [
 	{
 		title: "cloudinary",
 		access_label: "Cloud name",
-		description: `
+		questions: [
+			{
+				label: "access_alttext",
+				question: "How do i access the ALT text?",
+				html: `
 		<pre>
 			<code>context: &#123;
 			 	custom: &#123;
@@ -42,17 +46,36 @@ const integrations = [
 			&#125;&#59;</code>
 		</pre>
 		`,
+			},
+			{
+				label: "create_api_keys",
+				question: "How do i create API keys?",
+				answer: "Go to Settings > API Keys > Generate new API Key",
+			},
+		],
 	},
 	{
 		title: "imagekit",
 		access_label: "Endpoint",
-		description: `
-		<pre>
-			<code>customMetadata: &#123;
-			 	alt: string
-			&#125;&#59;</code>
-		</pre>
-		`,
+
+		questions: [
+			{
+				label: "access_alttext",
+				question: "How do i access the ALT text?",
+				html: `	
+				<pre>
+					<code>customMetadata: &#123;
+						alt: string
+					&#125;&#59;</code>
+				</pre>
+				`,
+			},
+			{
+				label: "create_api_keys",
+				question: "How do i create API keys?",
+				answer: "Go to Developer Options > API Keys > Create new",
+			},
+		],
 	},
 ];
 export default function Settings() {
@@ -62,49 +85,60 @@ export default function Settings() {
 		<div>
 			<div className="grid md:grid-flow-col grid-rows-1 md:grid-rows-2 gap-8">
 				{integrations.map((integration) => (
-					<>
+					<div key={integration.title}>
 						<SettingsForm
 							workplaceId={workplace.id}
-							key={integration.title}
 							lastResult={lastResult?.[integration.title]}
 							title={integration.title}
 							access_label={integration.access_label}
 						/>
-						<Collapsible
-							key={`${integration.title} description`}
-							className="pb-4 max-w-xs"
-						>
-							<div className="flex items-center justify-between gap-4 px-4">
-								<h4 className="text-sm font-bold">
-									How do i access the ALT text?
-								</h4>
-								<CollapsibleTrigger asChild>
-									<Button variant="ghost" size="sm" className="w-9 p-0">
-										<ChevronsUpDown className="h-4 w-4" />
-										<span className="sr-only">Toggle</span>
-									</Button>
-								</CollapsibleTrigger>
-							</div>
-							<CollapsibleContent>
-								<div className="px-4">
-									<div className="text-sm">
-										Access the ALT tag with{" "}
-										<span className="capitalize">{integration.title} </span> API
-										using:
-										<div
-											dangerouslySetInnerHTML={{
-												__html: integration.description,
-											}}
-										></div>
-										<p className="font-bold leading-normal">OR</p>
-										<pre>
-											<code> tags: string[]&#59;</code>
-										</pre>
-									</div>
+						{integration.questions?.map(({ question, answer, html, label }) => (
+							<Collapsible key={label} className="pb-4 mt-2 max-w-xs">
+								<div className="flex items-center justify-between gap-4 px-4">
+									<h4 className="text-sm font-bold">{question}</h4>
+									<CollapsibleTrigger asChild>
+										<Button variant="ghost" size="sm" className="w-9 p-0">
+											<ChevronsUpDown className="h-4 w-4" />
+											<span className="sr-only">Toggle</span>
+										</Button>
+									</CollapsibleTrigger>
 								</div>
-							</CollapsibleContent>
-						</Collapsible>
-					</>
+								<CollapsibleContent className="border mt-1 rounded-md">
+									<div className="p-4">
+										<div className="text-sm">
+											{label === "access_alttext" ? (
+												<>
+													Access the ALT tag with{" "}
+													<span className="capitalize">
+														{integration.title}{" "}
+													</span>{" "}
+													API using:
+													<div
+														dangerouslySetInnerHTML={{
+															__html: html!,
+														}}
+													></div>
+													<p className="font-bold leading-normal">OR</p>
+													<pre>
+														<code> tags: string[]&#59;</code>
+													</pre>
+												</>
+											) : "create_apikeys" ? (
+												<>
+													<p className="font-bold leading-normal">
+														Create API keys
+													</p>
+													<p className="text-sm">{answer}</p>
+												</>
+											) : (
+												<></>
+											)}
+										</div>
+									</div>
+								</CollapsibleContent>
+							</Collapsible>
+						))}
+					</div>
 				))}
 			</div>
 		</div>
