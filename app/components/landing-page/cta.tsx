@@ -3,7 +3,7 @@ import { Button } from "../ui/button";
 
 export function CallToAction() {
 	return (
-		<section className="flex flex-col items-center justify-center mt-12 gap-4 text-center">
+		<section className="flex flex-col items-center justify-center mt-8 gap-4 text-center">
 			<div>
 				<h2 className="font-bold text-xl md:text-3xl leading-normal">
 					Start for free today

@@ -22,7 +22,9 @@ import {
 } from "~/services/integrations.server";
 import { requireUser } from "~/services/auth.server";
 import { Checkbox } from "~/components/ui/checkbox";
-import { useState } from "react";
+import { createRef, useRef, useState } from "react";
+import { Image } from "~/components/workplace/image";
+import { IntegrationImage } from "~/lib/types/images";
 export async function loader({ request, params }: LoaderFunctionArgs) {
 	const user = await requireUser({ request, params });
 	const workplace = await getWorkplaceById(params.workplaceId!);
@@ -130,27 +132,37 @@ export async function action({ request, params }: ActionFunctionArgs) {
 }
 export default function Workplace() {
 	const { images, adminOrOwner } = useLoaderData<typeof loader>();
-	const { state, formData } = useNavigation();
+	const { state } = useNavigation();
 	const submitting = state === "submitting";
-	const image_url = formData?.get("image_url");
 
 	const [selectedImages, setSelectedImages] = useState(
 		images
 			? Object.entries(images).map(([key, images]) =>
-					images.map((image) => ({
-						id: image.id,
-						url: image.url,
-						hasDescription: image.context
-							? true
-							: image.tags && image.tags.length > 0
-							? true
-							: false,
-						selected: false,
-						integration: key,
-					}))
+					images
+						.filter(
+							(image) =>
+								(image.context
+									? true
+									: image.tags && image.tags.length > 0
+									? true
+									: false) === false
+						)
+						.map((image) => ({
+							id: image.id,
+							url: image.url,
+							hasDescription: image.context
+								? true
+								: image.tags && image.tags.length > 0
+								? true
+								: false,
+							selected: false,
+							integration: key,
+						}))
 			  )
 			: undefined
 	);
+	const imageRefs = useRef<HTMLDivElement[]>([]);
+
 	const [selectedAll, setSelectAll] = useState(false);
 
 	const handleSelectAllEmpty = (value: boolean) => {
@@ -162,6 +174,13 @@ export default function Workplace() {
 			)
 		);
 		setSelectAll(value);
+
+		if (value) {
+			imageRefs.current[0]?.scrollIntoView({
+				behavior: "smooth",
+				block: "center",
+			});
+		}
 	};
 	const handleSelectImage = (id: string, value: boolean) => {
 		setSelectedImages((integration) =>
@@ -177,7 +196,6 @@ export default function Workplace() {
 		const flattenedImages = selectedImages.flat();
 		return flattenedImages.filter(({ selected }) => selected);
 	};
-
 	return (
 		<div>
 			{images ? (
@@ -221,71 +239,21 @@ export default function Workplace() {
 						</section>
 						<div className="grid sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 mt-4 gap-4 md:gap-8">
 							{images?.map((image) => (
-								<div
+								<Image
+									ref={(element) =>
+										selectedImages
+											?.flat()
+											.find((currentImage) => currentImage.id === image.id)
+											? (imageRefs.current[
+													selectedImages[index].findIndex(
+														(currentImage) => currentImage.id === image.id
+													)
+											  ] = element!)
+											: null
+									}
 									key={image.id}
-									className="rounded-md border overflow-hidden flex flex-col"
-								>
-									<img
-										className="w-full flex-1 max-h-52 object-cover"
-										alt={image.name}
-										src={image.url}
-									/>
-									<div className="p-4 ">
-										<Form method="post" className="space-y-4">
-											<input type="hidden" value={image.id} name="public_id" />
-											<input type="hidden" value={image.url} name="image_url" />
-											<input
-												type="hidden"
-												value={image.source}
-												name="integration"
-											/>
-											<Input
-												errors={undefined}
-												description="ALT text"
-												placeholder="Generated ALT text will appear here"
-												aria-label="ALT text"
-												name="description"
-												defaultValue={
-													image.context ? image.context.custom.alt : ""
-												}
-												disabled={!image.context}
-											/>
-											<div className="flex justify-between items-center">
-												<Button
-													variant={image.context ? "secondary" : "default"}
-													disabled={submitting && image_url === image.url}
-													type="submit"
-													name="_action"
-													value={image.context ? "update" : "generate"}
-												>
-													{submitting && image_url === image.url
-														? image.context
-															? "Updating..."
-															: "Generating..."
-														: image.context
-														? "Change"
-														: "Generate"}
-												</Button>
-												{!image.context && (
-													<Checkbox
-														disabled={submitting}
-														checked={
-															selectedImages
-																? selectedImages[index]?.find(
-																		({ id }) => image.id === id
-																  )?.selected
-																: false
-														}
-														onCheckedChange={(value) =>
-															handleSelectImage(image.id, !!value)
-														}
-														aria-label="Select image"
-													/>
-												)}
-											</div>
-										</Form>
-									</div>
-								</div>
+									{...{ image, selectedImages, handleSelectImage, index }}
+								/>
 							))}
 						</div>
 					</div>

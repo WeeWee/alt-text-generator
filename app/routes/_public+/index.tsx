@@ -15,10 +15,10 @@ export default function Index() {
 	return (
 		<div>
 			<Hero />
-			<div className=" h-64 object-cover w-full" />
+
 			<Functionality />
 			<section className="flex flex-col items-center justify-center">
-				<div className="mt-8 text-muted-foreground max-w-[70ch] text-center text-sm">
+				<div className="mt-4 text-muted-foreground max-w-[70ch] text-center text-sm">
 					Lorem ipsum dolor sit amet consectetur adipisicing elit. Cum suscipit
 					quidem possimus sapiente! Praesentium pariatur, quis doloremque
 					corporis eaque facere corrupti impedit quod iure eos minus, ducimus
