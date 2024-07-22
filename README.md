@@ -1,6 +1,6 @@
 # Welcome to ALT Text!
-
-- 🧑‍💻[Demo](alt-text.adamkindberg.com)
+Alt text is a AI tool created to enchance your alt text, making it easier for you
+- 🧑‍💻[Demo](alttext.adamkindberg.com)
 
 ## Development
 
@@ -12,9 +12,13 @@ I'll use pnpm.
 pnpm dev
 ```
 
-## Migration
+## Generate SQL and Migration
 
-Migrate using the db:migrate command to migrate the schema to your database
+Generate SQL using the db:generate command to generate the SQL from the schema
+```shellscript
+pnpm db:generate
+```
+Migrate using the db:migrate command to migrate the SQL to your database
 ```shellscript
 pnpm db:migrate
 ```
@@ -24,26 +28,12 @@ pnpm db:migrate
 First, build your app for production:
 
 ```sh
-npm run build
+pnpm build
 ```
 
 Then run the app in production mode:
 
 ```sh
-npm start
+pnpm start
 ```
 
-Now you'll need to pick a host to deploy it to.
-
-### DIY
-
-If you're familiar with deploying Node applications, the built-in Remix app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
-
-- `build/server`
-- `build/client`
-
-## Styling
-
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever css framework you prefer. See the [Vite docs on css](https://vitejs.dev/guide/features.html#css) for more information.
