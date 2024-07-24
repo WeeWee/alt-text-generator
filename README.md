@@ -1,6 +1,6 @@
 # Welcome to ALT Text!
 Alt text is a AI tool created to enchance your alt text, making it easier for you to add accessibility!
-- 🧑‍💻[Demo](alttext.adamkindberg.com)
+- 🧑‍💻[Demo](https://alttext.adamkindberg.com)
 
 ## Development
 
